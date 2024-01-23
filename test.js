@@ -1,3 +1,3 @@
 function test() {
-  return console.log();
+  return console.log(),
 }
