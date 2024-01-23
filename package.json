@@ -1,0 +1,26 @@
+{
+  "name": "mango-clean-node-api",
+  "version": "1.0.0",
+  "description": "API Nodejs com Clean Archtecture e TDD",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Darlley/mango-clean-node-api.git"
+  },
+  "keywords": [
+    "nodejs",
+    "jest",
+    "tdd",
+    "clean-archtecture",
+    "mongodb"
+  ],
+  "author": "Darlley Brito/Rodrigo Manguinho",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Darlley/mango-clean-node-api/issues"
+  },
+  "homepage": "https://github.com/Darlley/mango-clean-node-api#readme"
+}
