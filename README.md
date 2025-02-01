@@ -3,7 +3,7 @@ Aprenda como criar uma API REST em NodeJS usando TDD, Clean Architecture e Desig
 [![maxresdefault (1)](https://github.com/Darlley/mango-clean-node-api/assets/37590954/884f700e-ff6c-4995-b2b8-612832614d24)](https://www.youtube.com/playlist?list=PL9aKtVrF05DyEwK5kdvzrYXFdpZfj1dsG)
 
 
-|   | CAPITULO 1                                                      |   |
+|   | AULA 1                                                          |   |
 |---|-----------------------------------------------------------------|---|
 | 1 | Inicio do projeto                                               | ✔️ |
 | 1 | Renomeação git origin                                           | ✔️ |
@@ -24,6 +24,15 @@ git status -s
   "node": ">=16.20.2"
 }
 ```
+
+|   | AULA 2                                                          |   |
+|---|-----------------------------------------------------------------|---|
+| 1 | Criação de login.js                                             | ✔️ |
+| 1 | Setup Express e rota de login                                   | ✔️ |
+| 2 | Classe SignUp desaclopada da rota                               | ✔️ |
+| 3 | Desacoplamento da validação e mongoose                          | ✔️ |
+| 4 | Camadas Clean Architecture                                      | ✔️ |
+| 4 | Pattern Adapter (desacoplamento do express)                     | ✔️ |
 
 ## Informações do Curso
 
