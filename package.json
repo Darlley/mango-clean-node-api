@@ -29,22 +29,6 @@
     "test:ci": "npm test -- --coverage --silent",
     "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info"
   },
-  "lint-staged": {
-    "*.js": [
-      "standard --fix",
-      "git add"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "standard": {
-    "env": [
-      "jest"
-    ]
-  },
   "devDependencies": {
     "@shelf/jest-mongodb": "^1.1.3",
     "coveralls": "^3.0.11",
