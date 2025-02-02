@@ -1,10 +1,14 @@
 const LoginRouter = require('./LoginRouter')
 const MissingParamError = require('../helpers/missing-param-error')
 
+const makeSut = () => {
+  return new LoginRouter()
+}
+
 describe('Login router', () => {
-  test('should return 400 if no email is provider', () => {
+  it('Should return 400 if no email is provider', () => {
     // Arrange (Preparar)
-    const sut = new LoginRouter() // system under test
+    const sut = makeSut() // system under test
     const httpRequest = {
       body: {
         // email: 'example@mail.com'
@@ -18,9 +22,9 @@ describe('Login router', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('email'))
   })
 
-  test('should return 400 if no password is provider', () => {
+  it('Should return 400 if no password is provider', () => {
     // Arrange (Preparar)
-    const sut = new LoginRouter() // system under test
+    const sut = makeSut() // system under test
     const httpRequest = {
       body: {
         email: 'example@mail.com'
@@ -34,18 +38,18 @@ describe('Login router', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('password'))
   })
 
-  test('Should return 500 if no httpRequest is provided', () => {
+  it('Should return 500 if no httpRequest is provided', () => {
     // Arrange (Preparar)
-    const sut = new LoginRouter() // system under test
+    const sut = makeSut() // system under test
     // Action (Executar)
     const httpResponse = sut.route()
     // Assert (Validar)
     expect(httpResponse.statusCode).toBe(500)
   })
 
-  test('Should return 500 if no httpRequest.body is provided', () => {
+  it('Should return 500 if no httpRequest.body is provided', () => {
     // Arrange (Preparar)
-    const sut = new LoginRouter() // system under test
+    const sut = makeSut() // system under test
     // Action (Executar)
     const httpResponse = sut.route({})
     // Assert (Validar)
