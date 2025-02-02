@@ -30,7 +30,9 @@
     "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info"
   },
   "standard": {
-    "env": ["jest"]
+    "env": [
+      "jest"
+    ]
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^1.1.3",
