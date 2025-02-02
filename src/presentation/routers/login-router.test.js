@@ -1,16 +1,14 @@
 class LoginRouter {
   route(httpRequest){
     const { email, password } = httpRequest.body
-    if (!email || !password) {
+    if (!email || !password){
       return {
         statusCode: 400
       }
     }
   }
 }
-
 describe('Login router', () => {
-  
   // Se não existe email = 400
   test('should return 400 if no email is provider', () => {
     // Arrange (Preparar)
@@ -26,7 +24,6 @@ describe('Login router', () => {
     // Assert (Validar)
     expect(httpResponse.statusCode).toBe(400)
   })
-
   // Se não existe password = 400
   test('should return 400 if no password is provider', () => {
     // Arrange (Preparar)
