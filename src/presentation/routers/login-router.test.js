@@ -1,6 +1,6 @@
 class LoginRouter {
   route (httpRequest) {
-    if(!httpRequest || !httpRequest.body){
+    if (!httpRequest || !httpRequest.body) {
       return httpResponse.serverError()
     }
 
@@ -21,6 +21,7 @@ class httpResponse {
       body: new MissingParamError(paramName)
     }
   }
+
   static serverError () {
     return {
       statusCode: 500
@@ -29,7 +30,7 @@ class httpResponse {
 }
 
 class MissingParamError extends Error {
-  constructor(paramName) {
+  constructor (paramName) {
     super(`Missing param ${paramName}`)
     this.name = 'MissingParamError'
   }
@@ -68,7 +69,7 @@ describe('Login router', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('password'))
   })
 
-  test("Should return 500 if no httpRequest is provided", () => {
+  test('Should return 500 if no httpRequest is provided', () => {
     // Arrange (Preparar)
     const sut = new LoginRouter() // system under test
     // Action (Executar)
@@ -76,8 +77,8 @@ describe('Login router', () => {
     // Assert (Validar)
     expect(httpResponse.statusCode).toBe(500)
   })
-  
-  test("Should return 500 if no httpRequest.body is provided", () => {
+
+  test('Should return 500 if no httpRequest.body is provided', () => {
     // Arrange (Preparar)
     const sut = new LoginRouter() // system under test
     // Action (Executar)
@@ -85,5 +86,4 @@ describe('Login router', () => {
     // Assert (Validar)
     expect(httpResponse.statusCode).toBe(500)
   })
-
 })
