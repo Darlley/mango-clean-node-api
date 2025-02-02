@@ -1,5 +1,6 @@
 const LoginRouter = require('./LoginRouter')
 const MissingParamError = require('../helpers/missing-param-error')
+const UnauthorizedError = require('../helpers/unauthorized-error')
 
 const makeSut = () => {
   class AuthUseCaseSpy {
@@ -90,5 +91,11 @@ describe('Login router', () => {
     }
     const httpResponse = sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(401)
+    expect(httpResponse.body).toEqual(new UnauthorizedError())
+
+    /**
+     * STATUS_CODE 401 = o sistema não identificou quem é o usuário
+     * STATUS_CODE 403 = o sistema sabe quem é, mas o usuário não tem permissão
+     */
   })
 })
