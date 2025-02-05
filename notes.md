@@ -173,3 +173,6 @@ Leitura adicional: ["Test Doubles (Mocks, Stubs, Fakes, Spies e Dummies)" Escrit
 **STATUS CODE**
 
 Ainda existe muita confusão quanto aos `STATUS_CODE/401` e `STATUS_CODE/403`. O 401 (unauthorized) é usado quando o sistema não identificou quem é o usuário na base de dados. O 403 é usado quando o sistema conseguiu identificar quem é o usuário, mas ele não tem permissão para executar aquela ação, um exemplo de quando isso ocorre é em perfis com níveis de permissão (user x admin).
+
+## #5 API em NodeJS com Clean Architecture e TDD - Login Router 3/4
+

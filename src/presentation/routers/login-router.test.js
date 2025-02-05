@@ -93,4 +93,28 @@ describe('Login router', () => {
     expect(httpResponse.statusCode).toBe(401)
     expect(httpResponse.body).toEqual(new UnauthorizedError())
   })
+
+  it('Should return 500 when if no AuthUseCaseSpy is provided', () => {
+    const sut = new LoginRouter()
+    const httpRequest = {
+      body: {
+        email: 'example@mail.com',
+        password: 'any_password'
+      }
+    }
+    const httpResponse = sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+  })
+  
+  it('Should return 500 when if AuthUseCaseSpy has no auth method', () => {
+    const sut = new LoginRouter({})
+    const httpRequest = {
+      body: {
+        email: 'example@mail.com',
+        password: 'any_password'
+      }
+    }
+    const httpResponse = sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+  })
 })
