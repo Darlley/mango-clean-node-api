@@ -140,7 +140,7 @@ describe('Login router', () => {
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
   })
-  
+
   it('Should return 500 when if AuthUseCaseSpy has no auth method', async () => {
     const sut = new LoginRouter({})
     const httpRequest = {
@@ -153,7 +153,7 @@ describe('Login router', () => {
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
   })
-  
+
   it('Should return 500 if AuthUseCaseSpy throws', async () => {
     const authUseCaseSpy = makeAuthUseSpyCaseWithError()
     const sut = new LoginRouter(authUseCaseSpy)

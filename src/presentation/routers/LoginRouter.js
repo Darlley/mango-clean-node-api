@@ -8,22 +8,21 @@ class LoginRouter {
   async route (httpRequest) {
     try {
       const { email, password } = httpRequest.body
-  
+
       if (!email) {
         return HttpResponse.badRequest('email')
       }
       if (!password) {
         return HttpResponse.badRequest('password')
       }
-  
+
       const accessToken = await this.authUseCase.auth(email, password)
-      if(!accessToken){
+      if (!accessToken) {
         return HttpResponse.unauthorizedError()
       }
-  
-      return HttpResponse.ok({ accessToken })
 
-    } catch(error) {
+      return HttpResponse.ok({ accessToken })
+    } catch (error) {
       console.error(`[ERROR] ${error.message}`)
       return HttpResponse.serverError()
     }

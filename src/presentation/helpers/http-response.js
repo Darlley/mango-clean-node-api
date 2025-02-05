@@ -9,6 +9,7 @@ class HttpResponse {
       body: data
     }
   }
+
   static badRequest (paramName) {
     return {
       statusCode: 400,
