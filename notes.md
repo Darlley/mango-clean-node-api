@@ -1,0 +1,175 @@
+# ANOTAÇÕES
+
+## #3 API em NodeJS com Clean Architecture e TDD - Login Router 1/4
+
+O conceito de TDD é justamente criar o teste instanciando classes que ainda não existem para depois criar o código dessas classes.
+
+Uma prática comum é criar as classes dentro do arquivo de teste até o teste que usa elas passar, após isso fazemos a modularização, movemos elas para a pasta correta.
+
+Nosso primeiro teste vai dar erro justamente por que estas classes não existem e devemos cria-las até o teste passar com o que se espera (`expect`) delas. 
+
+**SUT**
+
+Um padrão muito utilizado em testes unitarios é chamar o objeto que estamos testando de `SUT` (System Under Test). 
+
+```js
+const sut = new LoginRouter()
+```
+
+Isso é feito por que em testes mais complexos pode ter varias instancias de uma classe ou objeto, e o sut é uma forma de identificador para aquele objeto que se esta testando.
+
+**STANDARD E LINT-STAGED**
+
+Este comando vai corrigir o código para o padrão [https://standardjs.com/](https://standardjs.com/):
+
+```sh
+npx standard --fix
+```
+
+Este comando vai executar todos os outros comandos `"lint-staged` listados `package.json` somente para os arquivos no stage area (`git add`) do git:
+
+```sh
+npx lint-staged
+```
+
+**REFATORAÇÃO: LEGIBILIDADE DE CÓDIGO**
+
+Antes, nossa classe `LoginRouter` retornava o statusCode assim:
+
+```js
+return {
+  statusCode: 400
+}
+```
+
+Mas existem varios `statusCode` cada um com uma mensagem diferentes. Uma forma de padronizar e abstrair é criar uma classe somente para o retorno de httpResponse:
+
+```js
+class MissingParamError extends Error {
+  constructor (paramName) {
+    super(`Missing param ${paramName}`)
+    this.name = 'MissingParamError'
+  }
+}
+
+class HttpResponse {
+  static badRequest (paramName) {
+    return {
+      statusCode: 400,
+      body: new MissingParamError(paramName)
+    }
+  }
+  ...
+}
+```
+
+Agora o retorno vai ser assim:
+
+```js
+return HttpResponse.badRequest('email')
+```
+
+## #4 API em NodeJS com Clean Architecture e TDD - Login Router 2/4
+
+**ESTRUTURA DE PASTAS**
+
+Faça em sh no markwdown uma estrutura de pastas explicando o que cada uma tem de arquivo e a função dela:
+
+`src/presentation/helpers/**`
+
+Dentro de helpers ficam as classes auxiliares, abstração de retornos e customização de erros.
+
+`src/presentation/router/**`
+
+Em router ficam nossas rotas cada uma com seu arquivo de teste.
+
+**FACTORY**
+
+Design Pattern Factory serve para evitar de quebrar a nossa aplicação quando a gente altera a instancia de um objeto.
+
+No nosso caso estavamos criando uma instancia diferente de `LoginRouter` para cada teste. 
+
+```js
+const sut = new LoginRouter()
+```
+
+Com o patter a gente cria uma função externa que retorna a instancia uma unica vez.
+
+```js
+const makeSut = () => {
+  const sut = new LoginRouter()
+  return {
+    sut
+  }
+}
+
+describe('', () => {
+  it('', () => {
+    const { sut } = makeSut()
+  })
+})
+```
+
+Desta forma a gente reduz as mudanças individuais em cada teste.
+
+**DEPENDECY INJECTION**
+
+```js
+class AuthUseCaseSpy {
+  auth (email, password) {
+    this.email = email
+    this.password = password
+  }
+}
+class LoginRouter {
+  constructor (authUseCase) {
+    this.authUseCase = authUseCase
+  }
+  ...
+}
+const makeSut = () => {
+  const authUseCaseSpy = new AuthUseCaseSpy()
+  const sut = new LoginRouter(authUseCaseSpy) 
+  return { sut, authUseCaseSpy }
+}
+```
+
+Estamos "injetando" a instancia `authUseCaseSpy` no construtor da classe `LoginRouter`. Desta forma, mesmo que o módulo da classe não esteja importada em `LoginRouter` ela passa a fazer parte como um médoto interno herdado por ela.
+
+```js
+class LoginRouter {
+  ...
+  route (httpRequest) {
+    const { email, password } = httpRequest.body
+    this.authUseCase.auth(email, password)
+  }
+}
+```
+
+**TESTE DE INTEGRAÇÃO**
+
+Estamos fazendo um teste de integração entre nosso caso de uso (Regras de Negócio) `AuthUseCaseSpy` com nossa rota de autenticação `LoginRouter`.
+
+Isto a nível de código com a Dependency Injection e nos teste verificamos se os valores que passamos para o sut é a mesma (`toBe`) do authUseCaseSpy que ele recebeu internamente:
+
+```js
+it('', () => {
+  const { sut, authUseCaseSpy } = makeSut()
+  const httpRequest = {...}
+  sut.route(httpRequest)
+  expect(authUseCaseSpy.email).toBe(httpRequest.body.email)
+  expect(authUseCaseSpy.password).toBe(httpRequest.body.password)
+})
+```
+
+**TEST DOUBLES**
+
+O que estamos testando é o comportamento de `LoginRouter`, portanto a classe `AuthUseCaseSpy` ainda esta no arquivo de teste, ela é um spie que esta nos ajudando a testar `LoginRouter`.
+
+Existe varios "Test Doubles" (Dublês de testes): Mocks, Stubs, Fakes, Spies e Dummies.
+
+Leitura adicional: ["Test Doubles (Mocks, Stubs, Fakes, Spies e Dummies)" Escrito por Pablo Rodrigo Darde](https://medium.com/rd-shipit/test-doubles-mocks-stubs-fakes-spies-e-dummies-a5cdafcd0daf)
+
+**STATUS CODE**
+
+Ainda existe muita confusão quanto aos `STATUS_CODE/401` e `STATUS_CODE/403`. O 401 (unauthorized) é usado quando o sistema não identificou quem é o usuário na base de dados. O 403 é usado quando o sistema conseguiu identificar quem é o usuário, mas ele não tem permissão para executar aquela ação, um exemplo de quando isso ocorre é em perfis com níveis de permissão (user x admin).
