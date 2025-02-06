@@ -181,3 +181,21 @@ Ainda existe muita confusão quanto aos `STATUS_CODE/401` e `STATUS_CODE/403`. O
 Quando não se modifica um arquivo de teste e tanta rodar o comando lint-staged o Jest falha quand não existe tests, a flag `--passWithNoTests` faz ele pular ou executar mesmo na ausência de testes.
 
 Linguagens compiladas (C#, Java, Swift, Kotlin) geralmente possuem Interfaces (protocolos). Em JavaScript as dependence injection se comportam como protocolos, conheço somente a assinatura dele (sei que é uma classe, qual método ele tem, quais parametros ele tem e o que ele retorna, igual um protocolo)
+
+## 7 API em NodeJS com Clean Architecture e TDD - CI & Jest 1/2
+
+Configurações para o Jest.
+
+`--passWithNoTests` executa mesmo quando não existem testes.
+`--watchAll` roda todos os testes em qualquer arquivo.
+`--watch` internamente usa o `--onlyChange` que só executa os arquivos de teste modificados. 
+`--findRelatedTests` só executa os arquivos de teste modificados sem o o modo `--watch`.
+`--silent` oculta a lista de testes e só mostra o resultado.
+`--silent --verbose` mostra a lista de testes mas sem os console do código.
+`--colors` aplica cores de sucesso ou erro em terminais fora do vscode.
+`--noStackTrace` mostra somente o que falhou.
+`--coverage` relatório se todos os arquivos do projetos estão cobertos por testes.
+
+Hook de CI:
+
+`pre-push`
