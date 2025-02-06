@@ -25,6 +25,14 @@ const makeEmailValidator = () => {
   emailValidatorSpy.isEmailValid = true
   return emailValidatorSpy
 }
+const makeEmailValidatorWithError = () => {
+  class EmailValidatorSpy {
+    isValid () {
+      throw new Error('')
+    }
+  }
+  return new EmailValidatorSpy()
+}
 
 const makeAuthUseCase = () => {
   class AuthUseCaseSpy {
@@ -212,6 +220,21 @@ describe('Login router', () => {
   it('Should return 500 when if no EmailValidator has no isValid method', async () => {
     const authUseCaseSpy = makeAuthUseCase()
     const emailValidatorSpy = {}
+    const sut = new LoginRouter(authUseCaseSpy, emailValidatorSpy)
+    const httpRequest = {
+      body: {
+        email: 'example@mail.com',
+        password: 'any_password'
+      }
+    }
+    const httpResponse = await sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
+  })
+
+  it('Should return 500 if EmailValidator throws', async () => {
+    const authUseCaseSpy = makeAuthUseCase()
+    const emailValidatorSpy = makeEmailValidatorWithError()
     const sut = new LoginRouter(authUseCaseSpy, emailValidatorSpy)
     const httpRequest = {
       body: {
