@@ -176,3 +176,4 @@ Ainda existe muita confusão quanto aos `STATUS_CODE/401` e `STATUS_CODE/403`. O
 
 ## #5 API em NodeJS com Clean Architecture e TDD - Login Router 3/4
 
+## #6 API em NodeJS com Clean Architecture e TDD - Login Router 4/4
