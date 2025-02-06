@@ -177,3 +177,5 @@ Ainda existe muita confusão quanto aos `STATUS_CODE/401` e `STATUS_CODE/403`. O
 ## #5 API em NodeJS com Clean Architecture e TDD - Login Router 3/4
 
 ## #6 API em NodeJS com Clean Architecture e TDD - Login Router 4/4
+
+Quando não se modifica um arquivo de teste e tanta rodar o comando lint-staged o Jest falha quand não existe tests, a flag `--passWithNoTests` faz ele pular ou executar mesmo na ausência de testes.
