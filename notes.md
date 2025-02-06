@@ -198,4 +198,50 @@ Configurações para o Jest.
 
 Hook de CI:
 
-`pre-push`
+```json
+"husky": {
+  "hooks": {
+    "pre-commit": "lint-staged",
+    "pre-push": "npm run test:ci"
+  }
+},
+```
+
+## #8 API em NodeJS com Clean Architecture e TDD - CI & Jest 2/2
+
+Tem uma forma de reaproveitar comandos/flag nos scripts do `package.json`, basta adiciona os comando que se repetem em um script e executa ele nos próximos que dependam dele com `npm [script-nome] --` (não precisa de `npm run`) os dois traços indicam que os próximo comandos farão parte dele ao final.
+
+```json
+"scripts": {
+  "test": "jest --colors --noStackTrace --passWithNoTests --runInBand",
+  "test:unit": "npm test -- --watch -c jest-unit-config.js",
+  "test:integration": "npm test -- --watch -c jest-integration-config.js",
+  "test:staged": "npm test -- --findRelatedTests --silent",
+  "test:ci": "npm test -- --coverage --silent",
+  "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info"
+},
+```
+
+Então, quando executamos `test:coveralls` ele executa o `test:ci` e recebe todos os comandos dele, e o `test:ci` por fim recebe todos os parametros do `test`.
+
+Por padrão, o Jest reconhece como arquivo de teste todo arquivo com `.test.js` ou `.spec.js`. Para que não se mistura as duas formas você pdoe especificar criando um arquivo `jest-unit-config.js` com configurações especificas para testes unitários e `jest-integration-config.js` com configurações especificas para testes de integração.
+
+```javascript 
+// jest-unit-config.js
+const config = require('./jest-config')
+config.testMatch = ['**/*.spec.js']
+module.exports = config
+```
+
+Neste exemplo estamos importando as configurações gerais do `jest-config.js` e adicionando as configurações especificas para o teste unitário. Neste caso estamos trabalhando com testes unitários em arquivos `.spec.js` e testes de integração em `.test.js`.
+
+Para vincular cada configuração a um script diferente basta adicionar -c e o nome do arquivo
+
+```json
+"scripts": {
+  "test:unit": "npm test -- --watch -c jest-unit-config.js",
+  "test:integration": "npm test -- --watch -c jest-integration-config.js"
+}
+```
+
+Por default, sem o `-c` o Jests usa as configurações de `jest.config.js`.

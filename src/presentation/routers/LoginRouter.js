@@ -31,7 +31,6 @@ class LoginRouter {
 
       return HttpResponse.ok({ accessToken })
     } catch (error) {
-      console.error(`[ERROR] ${error.message}`)
       return HttpResponse.serverError()
     }
   }
