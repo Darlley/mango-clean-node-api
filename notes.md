@@ -279,3 +279,5 @@ O segundo teste será para a validação retornar false quando for um email inva
 Porém, não queremos testar se o validator funciona, por que a gente usa bibliotecas ja partindo deste pressuposto. Então, o que queremos na verdade é a integração dele com o meu componente. Devemos mockar para não utilizar ele nos testes. 
 
 Com o Jest, criamos uma pasta `__mocks__` com um arquivo com o mesmo nome da lib que estamos testando (`validator.js`). O Jest ja entende que a lib vai ser substituida pelo arquivo da versão "mockada".
+
+O terceiro teste verifica se o email a ser validado é o mesmo que foi validado.
