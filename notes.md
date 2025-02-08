@@ -250,4 +250,16 @@ Por default, sem o `-c` o Jests usa as configurações de `jest.config.js`.
 
 Refatoração:
 
-- `/helpers` esta poluída (muitos arquivos), misturando response com errors. Vamos separar em `/helpers/errors
+- `/helpers` esta poluída (muitos arquivos), misturando response com errors. Vamos separar em `/helpers/errors.
+
+Ainda temos uma inconveniência de ter muitos arquivos de import: 
+
+```js
+const MissingParamError = require('../errors/missing-param-error')
+const UnauthorizedError = require('../errors/unauthorized-error')
+const ServerError = require('../errors/server-error')
+const InvalidParamError = require('../errors/invalid-param-error')
+```
+
+Uma estratégia elegante é exportar tudo a partir de um arquivo `index.js`:
+
