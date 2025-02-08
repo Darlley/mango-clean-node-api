@@ -271,6 +271,11 @@ module.exports = {
 const { MissingParamError, UnauthorizedError, ServerError, InvalidParamError } = require('../errors')
 ```
 
-Temos que implementar nossa classe `EmailValidator`, ja temos um mock/spy dela nos testes mas ela não esta implementada de fato. Como este recurso é bem genérico e pode ser reaproveitado em varios casos de uso é melhor deixa-lo em um diretório `presentation/utils/`. Nossa classe será simplesmente um wrapper para um serviço de terceiro, seja uma lib ou um regex. Vamos usar nesse exemplo o componente `Validator`.
+Temos que implementar nossa classe `EmailValidator`, ja temos um mock/spy dela nos testes mas ela não esta implementada de fato. Como este recurso é bem genérico e pode ser reaproveitado em varios casos de uso é melhor deixa-lo em um diretório `presentation/utils/`. Nossa classe será simplesmente um wrapper para um serviço de terceiro, seja uma lib ou um regex. Vamos usar nesse exemplo o componente `validator@13.12.0`.
 
-O primeiro teste será para integrar esse biblioteca com nossa classe.
+O primeiro teste será para a validação retornar true quando for um email valido;
+O segundo teste será para a validação retornar false quando for um email invalido. Neste passo devemos usar o `validator`. 
+
+Porém, não queremos testar se o validator funciona, por que a gente usa bibliotecas ja partindo deste pressuposto. Então, o que queremos na verdade é a integração dele com o meu componente. Devemos mockar para não utilizar ele nos testes. 
+
+Com o Jest, criamos uma pasta `__mocks__` com um arquivo com o mesmo nome da lib que estamos testando (`validator.js`). O Jest ja entende que a lib vai ser substituida pelo arquivo da versão "mockada".
