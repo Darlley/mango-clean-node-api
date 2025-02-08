@@ -182,7 +182,7 @@ Quando não se modifica um arquivo de teste e tanta rodar o comando lint-staged 
 
 Linguagens compiladas (C#, Java, Swift, Kotlin) geralmente possuem Interfaces (protocolos). Em JavaScript as dependence injection se comportam como protocolos, conheço somente a assinatura dele (sei que é uma classe, qual método ele tem, quais parametros ele tem e o que ele retorna, igual um protocolo)
 
-## 7 API em NodeJS com Clean Architecture e TDD - CI & Jest 1/2
+## #7 API em NodeJS com Clean Architecture e TDD - CI & Jest 1/2
 
 Configurações para o Jest.
 
@@ -245,3 +245,9 @@ Para vincular cada configuração a um script diferente basta adicionar -c e o n
 ```
 
 Por default, sem o `-c` o Jests usa as configurações de `jest.config.js`.
+
+## #9 API em NodeJS com Clean Architecture e TDD - Email Validator
+
+Refatoração:
+
+- `/helpers` esta poluída (muitos arquivos), misturando response com errors. Vamos separar em `/helpers/errors

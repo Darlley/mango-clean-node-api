@@ -1,8 +1,8 @@
 const LoginRouter = require('./LoginRouter')
-const MissingParamError = require('../helpers/missing-param-error')
-const UnauthorizedError = require('../helpers/unauthorized-error')
-const ServerError = require('../helpers/server-error')
-const InvalidParamError = require('../helpers/invalid-param-error')
+const MissingParamError = require('../errors/missing-param-error')
+const UnauthorizedError = require('../errors/unauthorized-error')
+const ServerError = require('../errors/server-error')
+const InvalidParamError = require('../errors/invalid-param-error')
 
 const makeSut = () => {
   const authUseCaseSpy = makeAuthUseCase()
@@ -10,7 +10,9 @@ const makeSut = () => {
   const sut = new LoginRouter(authUseCaseSpy, emailValidatorSpy) // dependency injection
 
   return {
-    sut, authUseCaseSpy, emailValidatorSpy
+    sut,
+    authUseCaseSpy,
+    emailValidatorSpy
   }
 }
 
