@@ -250,16 +250,27 @@ Por default, sem o `-c` o Jests usa as configurações de `jest.config.js`.
 
 Refatoração:
 
-- `/helpers` esta poluída (muitos arquivos), misturando response com errors. Vamos separar em `/helpers/errors.
-
-Ainda temos uma inconveniência de ter muitos arquivos de import: 
+- `/helpers` está poluída (muitos arquivos), misturando response com errors. Vamos separar em `/helpers/errors/`.
+- Existem muitos arquivos de import. Uma estratégia elegante é exportar tudo a partir de um arquivo `index.js`:
 
 ```js
-const MissingParamError = require('../errors/missing-param-error')
-const UnauthorizedError = require('../errors/unauthorized-error')
-const ServerError = require('../errors/server-error')
-const InvalidParamError = require('../errors/invalid-param-error')
+// errors/index.js
+const MissingParamError = require('./missing-param-error')
+const UnauthorizedError = require('./unauthorized-error')
+const ServerError = require('./server-error')
+const InvalidParamError = require('./invalid-param-error')
+
+module.exports = {
+  MissingParamError,
+  UnauthorizedError,
+  ServerError,
+  InvalidParamError
+}
+
+// login-router.spec.js
+const { MissingParamError, UnauthorizedError, ServerError, InvalidParamError } = require('../errors')
 ```
 
-Uma estratégia elegante é exportar tudo a partir de um arquivo `index.js`:
+Temos que implementar nossa classe `EmailValidator`, ja temos um mock/spy dela nos testes mas ela não esta implementada de fato. Como este recurso é bem genérico e pode ser reaproveitado em varios casos de uso é melhor deixa-lo em um diretório `presentation/utils/`. Nossa classe será simplesmente um wrapper para um serviço de terceiro, seja uma lib ou um regex. Vamos usar nesse exemplo o componente `Validator`.
 
+O primeiro teste será para integrar esse biblioteca com nossa classe.
