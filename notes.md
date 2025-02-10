@@ -182,7 +182,7 @@ Quando não se modifica um arquivo de teste e tanta rodar o comando lint-staged 
 
 Linguagens compiladas (C#, Java, Swift, Kotlin) geralmente possuem Interfaces (protocolos). Em JavaScript as dependence injection se comportam como protocolos, conheço somente a assinatura dele (sei que é uma classe, qual método ele tem, quais parametros ele tem e o que ele retorna, igual um protocolo)
 
-## 7 API em NodeJS com Clean Architecture e TDD - CI & Jest 1/2
+## #7 API em NodeJS com Clean Architecture e TDD - CI & Jest 1/2
 
 Configurações para o Jest.
 
@@ -245,3 +245,39 @@ Para vincular cada configuração a um script diferente basta adicionar -c e o n
 ```
 
 Por default, sem o `-c` o Jests usa as configurações de `jest.config.js`.
+
+## #9 API em NodeJS com Clean Architecture e TDD - Email Validator
+
+Refatoração:
+
+- `/helpers` está poluída (muitos arquivos), misturando response com errors. Vamos separar em `/helpers/errors/`.
+- Existem muitos arquivos de import. Uma estratégia elegante é exportar tudo a partir de um arquivo `index.js`:
+
+```js
+// errors/index.js
+const MissingParamError = require('./missing-param-error')
+const UnauthorizedError = require('./unauthorized-error')
+const ServerError = require('./server-error')
+const InvalidParamError = require('./invalid-param-error')
+
+module.exports = {
+  MissingParamError,
+  UnauthorizedError,
+  ServerError,
+  InvalidParamError
+}
+
+// login-router.spec.js
+const { MissingParamError, UnauthorizedError, ServerError, InvalidParamError } = require('../errors')
+```
+
+Temos que implementar nossa classe `EmailValidator`, ja temos um mock/spy dela nos testes mas ela não esta implementada de fato. Como este recurso é bem genérico e pode ser reaproveitado em varios casos de uso é melhor deixa-lo em um diretório `presentation/utils/`. Nossa classe será simplesmente um wrapper para um serviço de terceiro, seja uma lib ou um regex. Vamos usar nesse exemplo o componente `validator@13.12.0`.
+
+O primeiro teste será para a validação retornar true quando for um email valido;
+O segundo teste será para a validação retornar false quando for um email invalido. Neste passo devemos usar o `validator`. 
+
+Porém, não queremos testar se o validator funciona, por que a gente usa bibliotecas ja partindo deste pressuposto. Então, o que queremos na verdade é a integração dele com o meu componente. Devemos mockar para não utilizar ele nos testes. 
+
+Com o Jest, criamos uma pasta `__mocks__` com um arquivo com o mesmo nome da lib que estamos testando (`validator.js`). O Jest ja entende que a lib vai ser substituida pelo arquivo da versão "mockada".
+
+O terceiro teste verifica se o email a ser validado é o mesmo que foi validado.
