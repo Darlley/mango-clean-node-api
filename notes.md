@@ -281,3 +281,23 @@ Porém, não queremos testar se o validator funciona, por que a gente usa biblio
 Com o Jest, criamos uma pasta `__mocks__` com um arquivo com o mesmo nome da lib que estamos testando (`validator.js`). O Jest ja entende que a lib vai ser substituida pelo arquivo da versão "mockada".
 
 O terceiro teste verifica se o email a ser validado é o mesmo que foi validado.
+
+## #10 API em NodeJS com Clean Architecture e TDD - Auth UseCase 1/4
+
+Casos de uso ou regras de negócio ficam na camada de dominio (DDD). Nossa classe `AuthUseCase` e os testes `auth-usecase.spec.js` ficarão na pasta `src/domain/usecases/`.
+
+Ao invés de se escrever uma `new Promise()` com `reject` e o `resolve` a gente substitui pelo `async/await` que é uma forma mais elegante de escrever `promises` no JavaScript.
+
+```js
+class AuthUseCaseSpy {
+  async auth (email, password) {}
+}
+
+it('should throw if no email is provided', async () => {
+  const sut = new AuthUseCaseSpy()
+  const promise = sut.auth()
+  expect(promise).rejects.toThrow()
+})
+```
+
+No nosso caso chamamos uma função asincrona sem o await no nosso teste, isso é possível por que a função esta retornando simplesmente uma `promise` (.then, .cath)
