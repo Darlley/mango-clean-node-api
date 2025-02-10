@@ -1,6 +1,6 @@
 class AuthUseCaseSpy {
   async auth (email) {
-    if(!email) {
+    if (!email) {
       throw new Error()
     }
   }
