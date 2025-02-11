@@ -1,5 +1,11 @@
 # ANOTAÇÕES
 
+## CONCEITOS INICIAIS
+
+- [Async, Promises, Callbacks, Event Loop - JS](https://youtu.be/NQFQQonyAxI)
+- [Promise do zero em Javascript/Node js [pt1]: Async I/O, Callbacks e Event Loop](https://youtu.be/CcL2WZRvROQ)
+
+
 ## #3 API em NodeJS com Clean Architecture e TDD - Login Router 1/4
 
 O conceito de TDD é justamente criar o teste instanciando classes que ainda não existem para depois criar o código dessas classes.
@@ -301,3 +307,23 @@ it('should throw if no email is provided', async () => {
 ```
 
 No nosso caso chamamos uma função asincrona sem o await no nosso teste, isso é possível por que a função esta retornando simplesmente uma `promise` (.then, .cath)
+
+## #11 API em NodeJS com Clean Architecture e TDD - Auth UseCase 2/4
+
+Para autenticar o usuário vamos partir da premissa de que a gente vai guardar a senha no banco de dados criptografada. 
+
+O algorítmo que usaremos não permite descriptografar uma senha. Não podemos fazer uma consulta simples no banco de dados, os algoritmos de critografia sempre geram uma hash diferente, mesmo para valores iguais, então a hash gerada após o usuário escrever a senha de login sempre será diferente e nunca retornará uma consulta válida no banco de dados. É por isso que as bibliotecas de criptografia oferecem um método auxiliar de comparação, onde vamos informar nos parametros do método a string com a senha do usuário e a hash que é a senha do usuário criptografada e armazenada no banco de dados.
+
+Vídeos auxiliares:
+
+- [#1 UTF-8 Encoding](https://youtu.be/RNL8m2voKbI?si=vC32Yzv34QRTGI8Y)
+- [#2 Base-64 Encoding](https://youtu.be/7rTStT34G9M?si=P8AewP5TNBJYMnoK)
+- [#3 Hashing vs Encryption](https://youtu.be/u-H0jSyoMjc?si=RjE2y28MeIqg_Quj)
+
+`AuthUseCase` não faz acesso ao banco de dados, quem fica responsável por isso é a camada de infraestrura (`repository`). 
+
+Então temos que integrar os dois via `dependency injection`: passando a instancia da classe `LoadUserByEmailRepositorySpy` no construtor do AuthUseCaseSpy e validando no teste (`expect`) se o email passado no método `sut.auth()` é o mesmo (`toBe()`) que o do `LoadUserByEmailRepositorySpy`.
+
+Os próximos testes são para validar se `AuthUseCaseSpy` e `LoadUserByEmailRepositorySpy` estão integrados corretamente.
+
+O primeiro teste é se `AuthUseCaseSpy` esta recebendo no construtor o `loadUserByEmailRepositorySpy`.
