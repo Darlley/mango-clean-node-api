@@ -320,4 +320,10 @@ Vídeos auxiliares:
 - [#2 Base-64 Encoding](https://youtu.be/7rTStT34G9M?si=P8AewP5TNBJYMnoK)
 - [#3 Hashing vs Encryption](https://youtu.be/u-H0jSyoMjc?si=RjE2y28MeIqg_Quj)
 
-`AuthUseCase` não faz acesso ao banco de dados, quem fica responsável por isso é a camada de infraestrura (`repository`). Então temos que integrar os dois.
+`AuthUseCase` não faz acesso ao banco de dados, quem fica responsável por isso é a camada de infraestrura (`repository`). 
+
+Então temos que integrar os dois via `dependency injection`: passando a instancia da classe `LoadUserByEmailRepositorySpy` no construtor do AuthUseCaseSpy e validando no teste (`expect`) se o email passado no método `sut.auth()` é o mesmo (`toBe()`) que o do `LoadUserByEmailRepositorySpy`.
+
+Os próximos testes são para validar se `AuthUseCaseSpy` e `LoadUserByEmailRepositorySpy` estão integrados corretamente.
+
+O primeiro teste é se `AuthUseCaseSpy` esta recebendo no construtor o `loadUserByEmailRepositorySpy`.
