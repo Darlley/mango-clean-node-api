@@ -1,5 +1,5 @@
 const validator = require('validator') // jest substitiu pelo __mock__/validator.js
-const EmailValidator = require('../utils/EmailValidator')
+const EmailValidator = require('./EmailValidator')
 
 const makeSut = () => {
   return new EmailValidator()
