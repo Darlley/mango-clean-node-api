@@ -327,3 +327,39 @@ Então temos que integrar os dois via `dependency injection`: passando a instanc
 Os próximos testes são para validar se `AuthUseCaseSpy` e `LoadUserByEmailRepositorySpy` estão integrados corretamente.
 
 O primeiro teste é se `AuthUseCaseSpy` esta recebendo no construtor o `loadUserByEmailRepositorySpy`.
+
+## #12 API em NodeJS com Clean Architecture e TDD - Auth UseCase 3/4
+
+Modularizar `AuthUseCase`.
+Refatoração:
+
+```js
+// auth-usecase.js
+class AuthUseCase {
+  async auth (email, password) {
+    if (!this.loadUserByEmailRepository) throw new MissingParamError('loadUserByEmailRepository')
+    if (!this.loadUserByEmailRepository.load) throw new InvalidParamError('loadUserByEmailRepository')
+  }
+}
+```
+
+É opcional, mas vamos sacrificar os erros personalizados em cada if por algumas linhas de código. A classe ainda retorna uma exceção, então nos testes nós vamos dizer que esperamos (`expect`) uma exceção genérica (`toThrow()`)
+
+Em nossos testes queremos que o user seja null se método `load` da classe `LoadUserByEmailRepositorySpy` retornar null, mas não estamos retornando nada, então `user` é undefined (`!undefined = null`). Nosso teste era um falso positivo.
+`
+Então temos que mockar um valor padrão de user valido, como fizemos em outros testes.
+
+```js
+// auth-usecase.spec.js
+const loadUserByEmailRepositorySpy = new LoadUserByEmailRepositorySpy()
+loadUserByEmailRepositorySpy.user = {} // por padrão um user válido	
+```
+
+Agora vamos testar a integração com a biblioteca de criptografia.
+- Não estamos preocupados com o retorno do AuthUseCase
+- Tem que ter uma email valido, mas a senha pode ser qualquer coisa
+- Criar a classe `EncrypterSpy` 
+
+Para o teste esperamos (`expect`) que `encrypterSpy.password` seja a mesma (`toBe`) que a password que passamos e que `encrypterSpy.hashedPassword` seja a mesma (`toBe`) que `loadUserByEmailRepositorySpy.user.password`.
+
+Para gerar o token de autenticação devemos integrar com outro componente que vamos chamar de `TokenGenerator` que gerará um token pelo ID do usuário. O token generator é similiar a bibliotecas de criptografia mas ele permite descriptografar.
