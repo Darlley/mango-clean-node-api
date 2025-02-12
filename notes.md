@@ -330,4 +330,17 @@ O primeiro teste é se `AuthUseCaseSpy` esta recebendo no construtor o `loadUser
 
 ## #12 API em NodeJS com Clean Architecture e TDD - Auth UseCase 3/4
 
-Modularizar `AuthUseCaseSpy`.
+Modularizar `AuthUseCase`.
+Refatoração:
+
+```js
+// auth-usecase.js
+class AuthUseCase {
+  async auth (email, password) {
+    if (!this.loadUserByEmailRepository) throw new MissingParamError('loadUserByEmailRepository')
+    if (!this.loadUserByEmailRepository.load) throw new InvalidParamError('loadUserByEmailRepository')
+  }
+}
+```
+
+É opcional, mas vamos sacrificar os erros personalizados em cada if por algumas linhas de código. A classe ainda retorna uma exceção, então nos testes nós vamos dizer que esperamos (`expect`) uma exceção genérica (`toThrow()`)
