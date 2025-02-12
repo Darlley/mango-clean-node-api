@@ -344,3 +344,14 @@ class AuthUseCase {
 ```
 
 É opcional, mas vamos sacrificar os erros personalizados em cada if por algumas linhas de código. A classe ainda retorna uma exceção, então nos testes nós vamos dizer que esperamos (`expect`) uma exceção genérica (`toThrow()`)
+
+Em nossos testes queremos que o user seja null se método `load` da classe `LoadUserByEmailRepositorySpy` retornar null, mas não estamos retornando nada, então `user` é undefined (`!undefined = null`). Nosso teste era um falso positivo.
+`
+Então temos que mockar um valor padrão de user valido, como fizemos em outros testes.
+
+```js
+// auth-usecase.spec.js
+const loadUserByEmailRepositorySpy = new LoadUserByEmailRepositorySpy()
+loadUserByEmailRepositorySpy.user = {} // por padrão um user válido	
+```
+
