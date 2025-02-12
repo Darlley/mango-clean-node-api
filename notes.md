@@ -355,3 +355,9 @@ const loadUserByEmailRepositorySpy = new LoadUserByEmailRepositorySpy()
 loadUserByEmailRepositorySpy.user = {} // por padrão um user válido	
 ```
 
+Agora vamos testar a integração com a biblioteca de criptografia.
+- Não estamos preocupados com o retorno do AuthUseCase
+- Tem que ter uma email valido, mas a senha pode ser qualquer coisa
+- Criar a classe `EncrypterSpy` 
+
+Para o teste esperamos (`expect`) que `encrypterSpy.password` seja a mesma (`toBe`) que a password que passamos e que `encrypterSpy.hashedPassword` seja a mesma (`toBe`) que `loadUserByEmailRepositorySpy.user.password`.
