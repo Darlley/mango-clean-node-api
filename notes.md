@@ -361,3 +361,5 @@ Agora vamos testar a integração com a biblioteca de criptografia.
 - Criar a classe `EncrypterSpy` 
 
 Para o teste esperamos (`expect`) que `encrypterSpy.password` seja a mesma (`toBe`) que a password que passamos e que `encrypterSpy.hashedPassword` seja a mesma (`toBe`) que `loadUserByEmailRepositorySpy.user.password`.
+
+Para gerar o token de autenticação devemos integrar com outro componente que vamos chamar de `TokenGenerator` que gerará um token pelo ID do usuário. O token generator é similiar a bibliotecas de criptografia mas ele permite descriptografar.
