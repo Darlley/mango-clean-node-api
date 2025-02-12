@@ -327,3 +327,7 @@ Então temos que integrar os dois via `dependency injection`: passando a instanc
 Os próximos testes são para validar se `AuthUseCaseSpy` e `LoadUserByEmailRepositorySpy` estão integrados corretamente.
 
 O primeiro teste é se `AuthUseCaseSpy` esta recebendo no construtor o `loadUserByEmailRepositorySpy`.
+
+## #12 API em NodeJS com Clean Architecture e TDD - Auth UseCase 3/4
+
+Modularizar `AuthUseCaseSpy`.
