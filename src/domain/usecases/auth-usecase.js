@@ -1,6 +1,6 @@
 const { MissingParamError, InvalidParamError } = require('../../utils/errors')
 
-class AuthUseCaseSpy {
+class AuthUseCase {
   constructor (loadUserByEmailRepository) {
     this.loadUserByEmailRepository = loadUserByEmailRepository
   }
@@ -23,4 +23,4 @@ class AuthUseCaseSpy {
   }
 }
 
-module.exports = AuthUseCaseSpy
+module.exports = AuthUseCase
