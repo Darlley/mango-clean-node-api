@@ -3,7 +3,7 @@ const AuthUseCase = require('./auth-usecase')
 
 const makeSut = () => {
   class EncrypterSpy {
-    async compare(password, hashedPassword) {
+    async compare (password, hashedPassword) {
       this.password = password
       this.hashedPassword = hashedPassword
     }
