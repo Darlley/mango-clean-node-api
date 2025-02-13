@@ -440,3 +440,9 @@ A dependencia `loadUserByEmailRepository` (no construtor da classe `AuthUseCase`
 3. 'should throw if no loadUserByEmailRepository has no load method'
 
 Então, ao invé de repetir os mesmos teste para cada dependencia, vamos fazer os três em um único teste, um para cada dependencia: reunitizar códigos repetidos e um array de sut's com todas as formas de se passar os parametros para o construtor.
+
+Repita o teste e crie as classes
+
+- `makeLoadUserByEmailRepositoryWithError`
+- `makeEncrypterWithError`
+- `makeTokenGeneratorWithError`
