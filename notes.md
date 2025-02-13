@@ -363,3 +363,25 @@ Agora vamos testar a integração com a biblioteca de criptografia.
 Para o teste esperamos (`expect`) que `encrypterSpy.password` seja a mesma (`toBe`) que a password que passamos e que `encrypterSpy.hashedPassword` seja a mesma (`toBe`) que `loadUserByEmailRepositorySpy.user.password`.
 
 Para gerar o token de autenticação devemos integrar com outro componente que vamos chamar de `TokenGenerator` que gerará um token pelo ID do usuário. O token generator é similiar a bibliotecas de criptografia mas ele permite descriptografar.
+
+## #13 API em NodeJS com Clean Architecture e TDD - Auth UseCase 4/4
+
+Precisamos armazenar o token de acesso na tabela do usuário para concluir o Use Case. Mas para fazer isso a gente vai precisar incluir mais uma `dependency injection` no construtor da classe `AuthUseCase`, que ja tem três, a ordem importa, portanto vamos refatorar essa classe.
+
+O que podemos fazer é passar um unico objeto para o construtor e este objeto vai ter cada dependencia como propriedades internas.
+
+```js
+class AuthUseCase {
+  constructor ({ 
+    loadUserByEmailRepository, 
+    encrypter, 
+    tokenGenerator 
+  }) {}
+}
+
+new AuthUseCase({
+  loadUserByEmailRepository: loadUserByEmailRepositorySpy, 
+  encrypter: encrypterSpy, 
+  tokenGenerator: tokenGeneratorSpy
+})
+```
