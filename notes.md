@@ -385,3 +385,48 @@ new AuthUseCase({
   tokenGenerator: tokenGeneratorSpy
 })
 ```
+
+Desta forma, dois testes que usam diretamente a instancia de `AuthUseCase` nossos testes vão falhar:
+
+```js
+it('should throw if no loadUserByEmailRepository is provided', async () => {
+  // const sut = new AuthUseCase()
+  const sut = new AuthUseCase({})
+})
+
+it('should throw if no loadUserByEmailRepository has no load method', async () => {
+  // const sut = new AuthUseCase({})
+  const sut = new AuthUseCase({ loadUserByEmailRepository: {} })
+})
+```
+
+Com essa refatoração criamos mais um caso para testar: quando o construtor não receber nenhum objeto `new AuthUseCase()` ele deve retornar um Throw também.
+
+Podemos refatorar o construtor para receber um args ou valor padrão (objeto vazio):
+
+```js
+class AuthUseCase {
+  // primeira opção: um if sempre é o mais deselegante
+  constructor (args) {
+    if(args){
+      this.loadUserByEmailRepository = args.loadUserByEmailRepository
+      this.encrypter = args.encrypter
+      this.tokenGenerator = args.tokenGenerator
+    }
+  }
+
+  // segunda opção: é bom, mas pode melhorar
+  constructor (args = {}) {
+    this.loadUserByEmailRepository = args.loadUserByEmailRepository
+    this.encrypter = args.encrypter
+    this.tokenGenerator = args.tokenGenerator
+  }
+
+  // ✅ terceira opção: nossa solução definitiva
+  constructor ({ loadUserByEmailRepository, encrypter, tokenGenerator } = {}) {
+    this.loadUserByEmailRepository = loadUserByEmailRepository
+    this.encrypter = encrypter
+    this.tokenGenerator = tokenGenerator
+  }
+}
+```
