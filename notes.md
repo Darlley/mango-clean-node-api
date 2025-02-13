@@ -430,3 +430,13 @@ class AuthUseCase {
   }
 }
 ```
+
+Ja integramos as dependencias de `Encrypter` e `TogenGenerator`, mas não estamos fazendo os mesmo teste que fizemos em `loadUserByEmailRepository` de garantir que elas existem e são válidas.
+
+A dependencia `loadUserByEmailRepository` (no construtor da classe `AuthUseCase`) possui três casos de testes:
+
+1. 'should throw if no dependency is provided'
+2. 'should throw if no loadUserByEmailRepository is provided'
+3. 'should throw if no loadUserByEmailRepository has no load method'
+
+Então, ao invé de repetir os mesmos teste para cada dependencia, vamos fazer os três em um único teste, um para cada dependencia: reunitizar códigos repetidos e um array de sut's com todas as formas de se passar os parametros para o construtor.
