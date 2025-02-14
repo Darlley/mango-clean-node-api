@@ -446,3 +446,7 @@ Repita o teste e crie as classes
 - `makeLoadUserByEmailRepositoryWithError`
 - `makeEncrypterWithError`
 - `makeTokenGeneratorWithError`
+
+## #14 API em NodeJS com Clean Architecture e TDD - Encrypter
+
+Vamos começar pelo desenvolvimento de Encrypter.
