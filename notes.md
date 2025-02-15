@@ -449,4 +449,44 @@ Repita o teste e crie as classes
 
 ## #14 API em NodeJS com Clean Architecture e TDD - Encrypter
 
-Vamos começar pelo desenvolvimento de Encrypter.
+Tivemos um pequeno desafio ao escrever o teste de validação de parametro do método `isValid` da classe `EmailValidator`:
+
+```js
+// EmailValidator.js
+class EmailValidator {
+  isValid (email) {
+    if(!email) throw new MissingParamError('email')
+  }
+}
+
+// email-validator.spec.js
+it('should throw if no email is provided', async () => {
+  const sut = makeSut()
+  expect(sut.isValid()).rejects.toThrow(new MissingParamError('email'))
+})
+```
+
+Era esperado que o teste passasse ja que esperamos (expect) um excessão (rejects.toThrow). Mas o teste não passou. **Isso aconteceu por que o método `isValid` não é assincrono.**
+
+> [!NOTE] 
+> Quando estamos testando excessão de um método que não é assincrono temos que passar o `ponteiro` da função.
+
+o Jest espera que as promessas sejam tratadas de maneira assíncrona com `.rejects.toThrow,` mas como a função isValid não retorna uma promessa, o Jest não consegue capturar o erro corretamente. Para o teste passar ele deve ser escrito de duas formas:
+
+```js
+it('should throw if no email is provided', async () => {
+  const sut = makeSut()
+  expect(sut.isValid).toThrow(new MissingParamError('email'))
+})
+```
+
+Dessa forma o Jest chama a função dentro de seu próprio contexto e pode capturar corretamente qualquer erro lançado. 
+
+```js
+it('should throw if no email is provided', async () => {
+  const sut = makeSut()
+  expect(() => { sut.isValid() }).toThrow(new MissingParamError('email'))
+})
+```
+
+A arrow function executará `sut.isValid()`. Isso permite que o Jest capture o erro lançado durante a execução da função isValid. Encapsular a chamada da função em uma arrow function pode ser mais explícito sobre a intenção de testar se a função lança uma exceção durante sua execução.

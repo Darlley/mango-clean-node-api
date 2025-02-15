@@ -1,5 +1,6 @@
 const validator = require('validator') // jest substitiu pelo __mock__/validator.js
 const EmailValidator = require('./EmailValidator')
+const MissingParamError = require('../errors/missing-param-error')
 
 const makeSut = () => {
   return new EmailValidator()
@@ -24,5 +25,10 @@ describe('Email Validator', () => {
     const email = 'invalid email'
     sut.isValid(email)
     expect(sut.email).toBe(email)
+  })
+
+  it('should throw if no email is provided', async () => {
+    const sut = makeSut()
+    expect(() => { sut.isValid() }).toThrow(new MissingParamError('email'))
   })
 })
