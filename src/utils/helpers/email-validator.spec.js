@@ -1,6 +1,6 @@
 const validator = require('validator') // jest substitiu pelo __mock__/validator.js
 const EmailValidator = require('./EmailValidator')
-const MissingParamError = require('../errors/missing-param-error')
+const { MissingParamError } = require('../errors')
 
 const makeSut = () => {
   return new EmailValidator()
