@@ -363,3 +363,86 @@ Agora vamos testar a integração com a biblioteca de criptografia.
 Para o teste esperamos (`expect`) que `encrypterSpy.password` seja a mesma (`toBe`) que a password que passamos e que `encrypterSpy.hashedPassword` seja a mesma (`toBe`) que `loadUserByEmailRepositorySpy.user.password`.
 
 Para gerar o token de autenticação devemos integrar com outro componente que vamos chamar de `TokenGenerator` que gerará um token pelo ID do usuário. O token generator é similiar a bibliotecas de criptografia mas ele permite descriptografar.
+
+## #13 API em NodeJS com Clean Architecture e TDD - Auth UseCase 4/4
+
+Precisamos armazenar o token de acesso na tabela do usuário para concluir o Use Case. Mas para fazer isso a gente vai precisar incluir mais uma `dependency injection` no construtor da classe `AuthUseCase`, que ja tem três, a ordem importa, portanto vamos refatorar essa classe.
+
+O que podemos fazer é passar um unico objeto para o construtor e este objeto vai ter cada dependencia como propriedades internas.
+
+```js
+class AuthUseCase {
+  constructor ({ 
+    loadUserByEmailRepository, 
+    encrypter, 
+    tokenGenerator 
+  }) {}
+}
+
+new AuthUseCase({
+  loadUserByEmailRepository: loadUserByEmailRepositorySpy, 
+  encrypter: encrypterSpy, 
+  tokenGenerator: tokenGeneratorSpy
+})
+```
+
+Desta forma, dois testes que usam diretamente a instancia de `AuthUseCase` nossos testes vão falhar:
+
+```js
+it('should throw if no loadUserByEmailRepository is provided', async () => {
+  // const sut = new AuthUseCase()
+  const sut = new AuthUseCase({})
+})
+
+it('should throw if no loadUserByEmailRepository has no load method', async () => {
+  // const sut = new AuthUseCase({})
+  const sut = new AuthUseCase({ loadUserByEmailRepository: {} })
+})
+```
+
+Com essa refatoração criamos mais um caso para testar: quando o construtor não receber nenhum objeto `new AuthUseCase()` ele deve retornar um Throw também.
+
+Podemos refatorar o construtor para receber um args ou valor padrão (objeto vazio):
+
+```js
+class AuthUseCase {
+  // primeira opção: um if sempre é o mais deselegante
+  constructor (args) {
+    if(args){
+      this.loadUserByEmailRepository = args.loadUserByEmailRepository
+      this.encrypter = args.encrypter
+      this.tokenGenerator = args.tokenGenerator
+    }
+  }
+
+  // segunda opção: é bom, mas pode melhorar
+  constructor (args = {}) {
+    this.loadUserByEmailRepository = args.loadUserByEmailRepository
+    this.encrypter = args.encrypter
+    this.tokenGenerator = args.tokenGenerator
+  }
+
+  // ✅ terceira opção: nossa solução definitiva
+  constructor ({ loadUserByEmailRepository, encrypter, tokenGenerator } = {}) {
+    this.loadUserByEmailRepository = loadUserByEmailRepository
+    this.encrypter = encrypter
+    this.tokenGenerator = tokenGenerator
+  }
+}
+```
+
+Ja integramos as dependencias de `Encrypter` e `TogenGenerator`, mas não estamos fazendo os mesmo teste que fizemos em `loadUserByEmailRepository` de garantir que elas existem e são válidas.
+
+A dependencia `loadUserByEmailRepository` (no construtor da classe `AuthUseCase`) possui três casos de testes:
+
+1. 'should throw if no dependency is provided'
+2. 'should throw if no loadUserByEmailRepository is provided'
+3. 'should throw if no loadUserByEmailRepository has no load method'
+
+Então, ao invé de repetir os mesmos teste para cada dependencia, vamos fazer os três em um único teste, um para cada dependencia: reunitizar códigos repetidos e um array de sut's com todas as formas de se passar os parametros para o construtor.
+
+Repita o teste e crie as classes
+
+- `makeLoadUserByEmailRepositoryWithError`
+- `makeEncrypterWithError`
+- `makeTokenGeneratorWithError`
