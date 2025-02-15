@@ -3,7 +3,7 @@ const MissingParamError = require('../errors/missing-param-error')
 
 class EmailValidator {
   isValid (email) {
-    if(!email) throw new MissingParamError('email')
+    if (!email) throw new MissingParamError('email')
 
     this.email = email
     return validator.isEmail(email)
