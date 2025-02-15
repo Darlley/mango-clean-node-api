@@ -116,7 +116,7 @@ describe('', () => {
 })
 ```
 
-Desta forma a gente reduz as mudanças individuais em cada teste.
+Note que `makeSut` não retorna somente a instancia de `sut`, ela retorna um objeto que pode conter varias instancias de outras classes. Desta forma a gente reduz as mudanças individuais em cada teste.
 
 **DEPENDECY INJECTION**
 
@@ -490,3 +490,21 @@ it('should throw if no email is provided', async () => {
 ```
 
 A arrow function executará `sut.isValid()`. Isso permite que o Jest capture o erro lançado durante a execução da função isValid. Encapsular a chamada da função em uma arrow function pode ser mais explícito sobre a intenção de testar se a função lança uma exceção durante sua execução.
+
+## #15 API em NodeJS com Clean Architecture e TDD - Token Generator
+
+A biblioteca externa, espera `secret` para gerar os tokens.
+
+```js
+class TokenGerator {
+  async generate (id) {
+    return jwt.sign(id, 'secret')
+  }
+}
+```
+
+Essa chave secreta provavelmente fica em um arquivo .env que são variaveis do ambiente.
+
+Problema: não posso, não deveria, em nenhuma das camadas (domain, prsentation, utils, etc) acessar meu arquivo main. Como temos classes desacopladas, é sempre a camada mais alta (main) que sabe instanciar as mais baixas, não o inverso. 
+
+Solução: precisamos injectar (dependency injection) a nossa chave secreta no construtor da classe `TokenGenerator`.
