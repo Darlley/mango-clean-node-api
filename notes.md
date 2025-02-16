@@ -508,3 +508,50 @@ Essa chave secreta provavelmente fica em um arquivo .env que são variaveis do a
 Problema: não posso, não deveria, em nenhuma das camadas (domain, prsentation, utils, etc) acessar meu arquivo main. Como temos classes desacopladas, é sempre a camada mais alta (main) que sabe instanciar as mais baixas, não o inverso. 
 
 Solução: precisamos injectar (dependency injection) a nossa chave secreta no construtor da classe `TokenGenerator`.
+
+## #16 API em NodeJS com Clean Architecture e TDD - LoadUserByEmail Repository 1/2
+
+- Install `"mongodb": "3.6"`: ([MongoDB DOC > Drivers > Nodejs > v3.6](https://www.mongodb.com/docs/drivers/node/v3.6/quick-start/))
+
+```js
+describe('LoadUserByEmail Repository', () => {
+  let connection, db;
+  beforeAll(async () => {
+    connection = await MongoClient.connect(process.env.MONGO_URL);
+    db = await connection.db();
+  });
+
+  afterAll(async () => {
+    await connection.close();
+  });
+}
+```
+
+- Install `"@shelf/jest-mongodb": "^1.1.3",`
+- Create `jest-mongodb-config.js` file:
+
+```js
+module.exports = {
+  mongodbMemoryServerOptions: {
+    binary: {
+      version: '4.0.3',
+      skipMD5: true,
+    },
+    autoStart: false,
+    instance: {
+
+    },
+  },
+  useSharedDBForAllJestWorkers: false,
+};
+```
+
+- Add in `jest-config.js`:
+
+```js
+module.exports = {
+  // ...
+  preset: '@shelf/jest-mongodb',
+  watchPathIgnorePatterns: ['globalConfig', 'node_modules']
+}
+```
