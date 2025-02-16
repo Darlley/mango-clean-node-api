@@ -1,5 +1,7 @@
 const { MongoClient } = require('mongodb')
 
+let connection, db
+
 class LoadUserByEmailRepository {
   constructor (userModel) {
     this.userModel = userModel
@@ -11,9 +13,13 @@ class LoadUserByEmailRepository {
   }
 }
 
-describe('LoadUserByEmail Repository', () => {
-  let connection, db
+const makeSut = () => {
+  const userModel = db.collection('users')
+  const sut = new LoadUserByEmailRepository(userModel)
+  return { sut, userModel }
+}
 
+describe('LoadUserByEmail Repository', () => {
   beforeAll(async () => {
     connection = await MongoClient.connect(process.env.MONGO_URL)
     db = await connection.db()
@@ -24,19 +30,18 @@ describe('LoadUserByEmail Repository', () => {
   })
 
   it('shuld return null if no user is found', async () => {
-    const userModel = db.collection('users')
-    const sut = new LoadUserByEmailRepository(userModel)
+    const { sut } = makeSut()
     const user = await sut.load('invalid_example@mail.com')
     expect(user).toBeNull()
   })
 
   it('shuld return an user if user is found', async () => {
-    const userModel = db.collection('users')
+    const { sut, userModel } = makeSut()
+
     await userModel.insertOne({
       email: 'valid_example@mail.com'
     })
 
-    const sut = new LoadUserByEmailRepository(userModel)
     const user = await sut.load('valid_example@mail.com')
     expect(user.email).toBe('valid_example@mail.com')
   })
