@@ -19,6 +19,10 @@ describe('LoadUserByEmail Repository', () => {
     db = await connection.db()
   })
 
+  beforeEach(async () => {
+    db.collection('users').deleteMany()
+  })
+
   it('shuld return null if no user is found', async () => {
     const userModel = db.collection('users')
     const sut = new LoadUserByEmailRepository(userModel)
