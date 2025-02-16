@@ -8,7 +8,16 @@ class LoadUserByEmailRepository {
   }
 
   async load (email) {
-    const user = await this.userModel.findOne({ email })
+    const user = await this.userModel.findOne(
+      {
+        email
+      },
+      {
+        projection: {
+          password: 1
+        }
+      }
+    )
     return user
   }
 }
@@ -21,7 +30,9 @@ const makeSut = () => {
 
 describe('LoadUserByEmail Repository', () => {
   beforeAll(async () => {
-    connection = await MongoClient.connect(process.env.MONGO_URL)
+    connection = await MongoClient.connect(process.env.MONGO_URL, {
+      useUnifiedTopology: true
+    })
     db = await connection.db()
   })
 
@@ -38,12 +49,19 @@ describe('LoadUserByEmail Repository', () => {
   it('shuld return an user if user is found', async () => {
     const { sut, userModel } = makeSut()
 
-    await userModel.insertOne({
-      email: 'valid_example@mail.com'
+    const fakeUser = await userModel.insertOne({
+      email: 'valid_example@mail.com',
+      name: 'any_name',
+      age: 26,
+      state: 'any_state',
+      password: 'hashed_password'
     })
 
     const user = await sut.load('valid_example@mail.com')
-    expect(user.email).toBe('valid_example@mail.com')
+    expect(user).toEqual({
+      _id: fakeUser.ops[0]._id,
+      password: fakeUser.ops[0].password
+    })
   })
 
   afterAll(async () => {

@@ -517,7 +517,9 @@ Solução: precisamos injectar (dependency injection) a nossa chave secreta no c
 describe('LoadUserByEmail Repository', () => {
   let connection, db;
   beforeAll(async () => {
-    connection = await MongoClient.connect(process.env.MONGO_URL);
+    connection = await MongoClient.connect(process.env.MONGO_URL, {
+      useUnifiedTopology: true
+    })
     db = await connection.db();
   });
 
