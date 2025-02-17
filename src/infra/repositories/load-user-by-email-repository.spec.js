@@ -12,11 +12,15 @@ const makeSut = () => {
 describe('LoadUserByEmail Repository', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL)
-    db = MongoHelper.db
+    db = await MongoHelper.getDb()
   })
 
   beforeEach(async () => {
     db.collection('users').deleteMany()
+  })
+
+  afterAll(async () => {
+    await MongoHelper.disconnect()
   })
 
   it('shuld return null if no user is found', async () => {
@@ -41,9 +45,5 @@ describe('LoadUserByEmail Repository', () => {
       _id: fakeUser.ops[0]._id,
       password: fakeUser.ops[0].password
     })
-  })
-
-  afterAll(async () => {
-    await MongoHelper.disconnect()
   })
 })
