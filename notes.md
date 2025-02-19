@@ -511,7 +511,7 @@ Solução: precisamos injectar (dependency injection) a nossa chave secreta no c
 
 ## #16 API em NodeJS com Clean Architecture e TDD - LoadUserByEmail Repository 1/2
 
-- Install `"mongodb": "3.6"`: ([MongoDB DOC > Drivers > Nodejs > v3.6](https://www.mongodb.com/docs/drivers/node/v3.6/quick-start/))
+- Install `"mongodb": "3.3.5"`
 
 ```js
 describe('LoadUserByEmail Repository', () => {
