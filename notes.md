@@ -567,3 +567,7 @@ O Composition Root é uma abordagem onde todas as dependências da aplicação s
 Então as camadas/layers `domain`, `infra`, `presentation` e `utils` jamais devem criar a instancia de um objeto.
 
 Até o momento fizemos a aplicação sem dependender de um framework, na main vamos efetivamente escolher um para criar as rotas. Em nosso projeto será o Express.
+
+Por padrão o Express adiciona um header `x-powered-by: Express`. Tradicionalmente, os headers com o prefixo X- foram usados para indicar que são headers personalizados ou não padronizados. O prefixo X- significa "extensão", e originalmente indicava que o header não era uma parte oficial dos padrões HTTP, mas uma extensão customizada. Você pdoe remove-lo com `app.disable('x-powered-by')`
+
+A biblioteca `Supertest` me permite simular uma requisição.
