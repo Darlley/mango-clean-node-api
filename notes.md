@@ -557,3 +557,17 @@ module.exports = {
   watchPathIgnorePatterns: ['globalConfig', 'node_modules']
 }
 ```
+
+## #20 API em NodeJS com Clean Architecture e TDD - Composition Root 1/4
+
+Agora nós vamos criar nosso módulo `main`. Até agora o que fizemos foi criar componentes reutilizaveis e agora vamos fazer a composição destes objetos. Isso é um design pattern chamado **Composition Root**.
+
+O Composition Root é uma abordagem onde todas as dependências da aplicação são configuradas e compostas em um único lugar, tipicamente no ponto de entrada da aplicação, como no método Main. Isso facilita a manutenção, testabilidade e clareza do código, centralizando a criação e configuração de todas as dependências.
+
+Então as camadas/layers `domain`, `infra`, `presentation` e `utils` jamais devem criar a instancia de um objeto.
+
+Até o momento fizemos a aplicação sem dependender de um framework, na main vamos efetivamente escolher um para criar as rotas. Em nosso projeto será o Express.
+
+Por padrão o Express adiciona um header `x-powered-by: Express`. Tradicionalmente, os headers com o prefixo X- foram usados para indicar que são headers personalizados ou não padronizados. O prefixo X- significa "extensão", e originalmente indicava que o header não era uma parte oficial dos padrões HTTP, mas uma extensão customizada. Você pdoe remove-lo com `app.disable('x-powered-by')`
+
+A biblioteca `Supertest` me permite simular uma requisição.
