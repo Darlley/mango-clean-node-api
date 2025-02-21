@@ -571,3 +571,44 @@ Até o momento fizemos a aplicação sem dependender de um framework, na main va
 Por padrão o Express adiciona um header `x-powered-by: Express`. Tradicionalmente, os headers com o prefixo X- foram usados para indicar que são headers personalizados ou não padronizados. O prefixo X- significa "extensão", e originalmente indicava que o header não era uma parte oficial dos padrões HTTP, mas uma extensão customizada. Você pdoe remove-lo com `app.disable('x-powered-by')`
 
 A biblioteca `Supertest` me permite simular uma requisição.
+
+## #21 API em NodeJS com Clean Architecture e TDD - Composition Root 2/4
+
+Tivemos um problema nos testes de `content-type.test.js`. Usamos a mesma rota `'/test_content_type'` para testar o content type, e isto causa erro de conflito por que fizemos o `const app = require('../config/app')` e criamos a rota no primeiro teste
+
+```js
+it('should return JSON Content-Type as default', async () => {
+  app.get('/test_content_type', (_, res) => res.send(''))
+
+  await request(app)
+    .get('/test_content_type')
+    .expect('content-type', /json/)
+})
+```
+
+E quando formos escrever outro teste a rota deve ser diferente:
+
+```js
+it('should return xml Content-Type if forced', async () => {
+  app.get('/test_content_type_xml', (_, res) => {
+    res.type('xml')
+    res.send('')
+  })
+
+  await request(app)
+    .get('/test_content_type_xml')
+    .expect('content-type', /xml/)
+})
+```
+
+Mas uma forma de contornar isto é usando a mesma instancia de app no beforeEach:
+
+```js
+describe('Content-Type Middleware', () => {
+  let app
+  beforeEach(() => {
+    jest.resetModules()
+    app = require('../config/app')
+  })
+})
+```
