@@ -2,12 +2,13 @@ const request = require('supertest')
 const app = require('../config/app')
 const bcrypt = require('bcrypt')
 const MongoHelper = require('../../infra/helpers/mongo-helper')
+const env = require('../config/env')
 
 let userModel
 
 describe('LoginRoutes', () => {
   beforeAll(async () => {
-    await MongoHelper.connect(process.env.MONGO_URL)
+    await MongoHelper.connect(env.MONGO_URL)
     userModel = await MongoHelper.getCollection('users')
   })
 

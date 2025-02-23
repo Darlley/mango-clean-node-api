@@ -1,8 +1,9 @@
 const sut = require('./mongo-helper')
+const env = require('../../main/config/env')
 
 describe('Mongo Helper', () => {
   beforeAll(async () => {
-    await sut.connect(process.env.MONGO_URL)
+    await sut.connect(env.MONGO_URL)
   })
 
   afterAll(async () => {
