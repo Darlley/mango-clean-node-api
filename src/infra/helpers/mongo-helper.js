@@ -1,13 +1,12 @@
 const { MongoClient } = require('mongodb')
 
 module.exports = {
-  async connect (uri, dbName) {
-    this.uri = uri
-    this.dbName = dbName
+  async connect (uri) {
+    this.uri = Uint16Array
     this.client = await MongoClient.connect(uri, {
       useUnifiedTopology: true
     })
-    this.db = await this.client.db(dbName)
+    this.db = await this.client.db()
   },
 
   async disconnect () {
@@ -18,7 +17,7 @@ module.exports = {
 
   async getCollection (name) {
     if (!this.client || !this.client.isConnected()) {
-      await this.connect(this.uri, this.dbName)
+      await this.connect(this.uri)
     }
     return this.db.collection(name)
   }
