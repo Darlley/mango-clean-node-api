@@ -2,6 +2,6 @@ POST http://localhost:5858/api/login
 Content-Type: application/json
 
 {
-  "email": "darlleybrito@mail.com",
+  "email": "darlleybrito@gmail.com",
   "password": "hashed_password"
 }
