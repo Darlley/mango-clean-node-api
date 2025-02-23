@@ -612,3 +612,18 @@ describe('Content-Type Middleware', () => {
   })
 })
 ```
+
+
+a gente não pode mockar as bibliotecas externas em testes de integração. Por tanto a alternativa é excluir a pasta `__mocks__` e criar o mock dentro do teste unitário mesmo. Por exemplo: 
+
+```js
+// email-validator.spec.js
+jest.mock('validator', () => ({
+  isEmailValid: true,
+
+  isEmail (email) {
+    this.email = email
+    return this.isEmailValid
+  }
+}))
+```
